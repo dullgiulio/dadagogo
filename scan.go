@@ -23,16 +23,14 @@ func newScanner(r io.Reader) *scanner {
 type consumer struct {
 	graph         *graph
 	firsts        []string
-	reader        io.Reader
 	buf           bytes.Buffer
 	npars, nwords int64
 }
 
-func newConsumer(r io.Reader) *consumer {
+func newConsumer() *consumer {
 	return &consumer{
 		graph:  newGraph(),
 		firsts: make([]string, 0),
-		reader: r,
 	}
 }
 
@@ -58,10 +56,8 @@ func (c *consumer) avgLen() int64 {
 	return c.nwords / c.npars
 }
 
-func (c *consumer) readAll() error {
-	scanner := bufio.NewScanner(c.reader)
-	c.graph.Lock()
-	defer c.graph.Unlock()
+func (c *consumer) readAll(r io.Reader) error {
+	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
 		if len(line) == 0 {

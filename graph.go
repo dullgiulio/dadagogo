@@ -98,7 +98,7 @@ func (w *walker) seed(s string) {
 	w.val = s
 }
 
-func (w *walker) random() error {
+func (w *walker) walk() error {
 	if w.val == "" {
 		return errors.New("walker needs to be seeded")
 	}
